@@ -1,0 +1,62 @@
+{
+  "name": "bedlam",
+  "version": "0.3.1",
+  "description": "Bedlam CLI — orchestrate AI agent teams to run a business",
+  "type": "module",
+  "bin": {
+    "bedlam": "./dist/index.js"
+  },
+  "keywords": [
+    "bedlam",
+    "ai",
+    "agents",
+    "orchestration",
+    "cli"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bedlam/bedlam",
+    "directory": "cli"
+  },
+  "homepage": "https://github.com/bedlam/bedlam",
+  "bugs": {
+    "url": "https://github.com/bedlam/bedlam/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "node --input-type=module -e \"import esbuild from 'esbuild'; import config from './esbuild.config.mjs'; await esbuild.build(config);\" && chmod +x dist/index.js",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.10.0",
+    "@bedlam/adapter-claude-local": "workspace:*",
+    "@bedlam/adapter-codex-local": "workspace:*",
+    "@bedlam/adapter-cursor-local": "workspace:*",
+    "@bedlam/adapter-gemini-local": "workspace:*",
+    "@bedlam/adapter-opencode-local": "workspace:*",
+    "@bedlam/adapter-pi-local": "workspace:*",
+    "@bedlam/adapter-openclaw-gateway": "workspace:*",
+    "@bedlam/adapter-utils": "workspace:*",
+    "@bedlam/db": "workspace:*",
+    "@bedlam/server": "workspace:*",
+    "@bedlam/shared": "workspace:*",
+    "drizzle-orm": "0.38.4",
+    "dotenv": "^17.0.1",
+    "commander": "^13.1.0",
+    "embedded-postgres": "^18.1.0-beta.16",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.12.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

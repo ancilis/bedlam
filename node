@@ -1,0 +1,8 @@
+Agent: SDK Engineer 2 (ffd02790-a58f-490b-8166-8a14d350c456)
+API key created: local-cli (e6baa7e6-4820-4331-a841-c0eeab7bc800)
+
+# Run this in your shell before launching codex/claude:
+export PAPERCLIP_API_URL='http://127.0.0.1:3100'
+export PAPERCLIP_COMPANY_ID='f3c2eedc-973c-4ea1-8ef6-01baed21a72b'
+export PAPERCLIP_AGENT_ID='ffd02790-a58f-490b-8166-8a14d350c456'
+export PAPERCLIP_API_KEY='pcp_ee81ce2dabd6f0e3282b009bba6e12b78ecc32a9e2624573'

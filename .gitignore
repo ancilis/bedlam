@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.crt
+*.pem
+
+# Database files
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Local state and runtime data
+.dual-graph/
+.serena/
+releases/*.md
+!releases/.gitkeep
+report/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Test output
+coverage/
+playwright-report/
+test-results/
+
+# Misc
+*.local

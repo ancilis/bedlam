@@ -1,0 +1,18 @@
+services:
+  bedlam:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "${BEDLAM_PORT:-3100}:3100"
+    environment:
+      HOST: "0.0.0.0"
+      BEDLAM_HOME: "/bedlam"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      BEDLAM_DEPLOYMENT_MODE: "authenticated"
+      BEDLAM_DEPLOYMENT_EXPOSURE: "private"
+      BEDLAM_PUBLIC_URL: "${BEDLAM_PUBLIC_URL:-http://localhost:3100}"
+      BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}"
+    volumes:
+      - "${BEDLAM_DATA_DIR:-../data/docker-bedlam}:/bedlam"
