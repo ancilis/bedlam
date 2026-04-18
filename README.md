@@ -140,14 +140,22 @@ See `CONTRIBUTING.md` and `AGENTS.md` for contribution guidelines and repo conve
 
 ---
 
+## Built With Bedlam
+
+Bedlam is the internal agent orchestration platform used to build [Ancilis](https://ancilis.ai) — agent compliance intelligence for enterprise AI deployments. The Ancilis engineering team runs a 16-agent Bedlam deployment to develop the platform, with the enhancements in this repo developed and battle-tested in that context.
+
+---
+
 ## Attribution
 
-Bedlam is a fork of [Paperclip](https://github.com/paperclipai/paperclip), originally created by Dotta. Licensed under MIT.
+Bedlam is a fork of [Paperclip](https://github.com/paperclipai/paperclip), originally created by Dotta.
 
-Upstream Paperclip is an open-source agent orchestration platform. Bedlam preserves all original functionality and adds the enhancements described above. Bug fixes and non-breaking improvements from upstream may be merged periodically.
+Upstream Paperclip is an open-source agent orchestration platform. Bedlam preserves all original Paperclip functionality and adds the enhancements described above. Bug fixes and non-breaking improvements from upstream may be merged periodically.
 
 ---
 
 ## License
 
-MIT — see `LICENSE`.
+Apache 2.0 — see `LICENSE`.
+
+Bedlam additions and enhancements are Copyright (c) 2026 Ancilis, Inc., licensed under Apache 2.0. Upstream Paperclip portions remain under the original MIT License. Both notices are included in `LICENSE`.

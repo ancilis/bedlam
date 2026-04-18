@@ -2,7 +2,7 @@
   "name": "bedlam",
   "description": "Open-source agent orchestration platform. Deploy a team of AI agents locally with org charts, budgets, governance, and stigmergic coordination.",
   "author": "Bedlam Contributors",
-  "private": true,
+  "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "dev": "pnpm --filter @bedlam/server exec tsx ../scripts/dev-runner.ts watch",
