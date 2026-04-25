@@ -71,6 +71,16 @@ graph_add_memory(type="decision|task|next|fact|blocker", content="one sentence m
 - `files` lists the files this decision/task relates to (can be empty)
 - Log immediately when the item arises — not at session end
 
+## Git Sync Rule
+
+**Before any task, branch, or file edit**, sync with origin:
+
+```sh
+git fetch origin && git checkout main && git pull origin main
+```
+
+This is mandatory. Worktrees and branches are created from local HEAD. If HEAD is stale, all work built on it will conflict on PR. Multiple agents write to this repo concurrently — always start from current main.
+
 ## Session End
 
 When the user signals they are done (e.g. "bye", "done", "wrap up", "end session"), proactively update `CONTEXT.md` in the project root with:

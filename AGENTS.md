@@ -1,11 +1,10 @@
-# AGENTS.md
+# [AGENTS.md](http://AGENTS.md)
 
 Guidance for human and AI contributors working in this repository.
 
 ## 1. Purpose
 
-Bedlam is a control plane for AI-agent companies.
-The current implementation target is V1 and is defined in `doc/SPEC-implementation.md`.
+Bedlam is a control plane for AI-agent companies. The current implementation target is V1 and is defined in `doc/SPEC-implementation.md`.
 
 ## 2. Read This First
 
@@ -17,8 +16,7 @@ Before making changes, read in this order:
 4. `doc/DEVELOPING.md`
 5. `doc/DATABASE.md`
 
-`doc/SPEC.md` is long-horizon product context.
-`doc/SPEC-implementation.md` is the concrete V1 build contract.
+`doc/SPEC.md` is long-horizon product context. `doc/SPEC-implementation.md` is the concrete V1 build contract.
 
 ## 3. Repo Map
 
@@ -61,28 +59,35 @@ pnpm dev
 
 ## 5. Core Engineering Rules
 
-1. Keep changes company-scoped.
-Every domain entity should be scoped to a company and company boundaries must be enforced in routes/services.
+0. **Sync with origin before starting any task.**
+Before creating a branch or touching any file, run:
+```sh
+git fetch origin
+git checkout main
+git pull origin main
+```
+Confirm your local main matches `origin/main` before branching. Worktrees branch from your local HEAD — if main is stale, every worktree inherits that staleness. Multiple agents (Paperclip, Claude Code on Mac, Claude Code on phone) write to this repo concurrently; a stale branch silently discards their work on force-push.
 
-2. Keep contracts synchronized.
-If you change schema/API behavior, update all impacted layers:
+1. Keep changes company-scoped. Every domain entity should be scoped to a company and company boundaries must be enforced in routes/services.
+
+2. Keep contracts synchronized. If you change schema/API behavior, update all impacted layers:
+
 - `packages/db` schema and exports
 - `packages/shared` types/constants/validators
 - `server` routes/services
 - `ui` API clients and pages
 
 3. Preserve control-plane invariants.
+
 - Single-assignee task model
 - Atomic issue checkout semantics
 - Approval gates for governed actions
 - Budget hard-stop auto-pause behavior
 - Activity logging for mutating actions
 
-4. Do not replace strategic docs wholesale unless asked.
-Prefer additive updates. Keep `doc/SPEC.md` and `doc/SPEC-implementation.md` aligned.
+4. Do not replace strategic docs wholesale unless asked. Prefer additive updates. Keep `doc/SPEC.md` and `doc/SPEC-implementation.md` aligned.
 
-5. Keep plan docs dated and centralized.
-New plan documents belong in `doc/plans/` and should use `YYYY-MM-DD-slug.md` filenames.
+5. Keep plan docs dated and centralized. New plan documents belong in `doc/plans/` and should use `YYYY-MM-DD-slug.md` filenames.
 
 ## 6. Database Change Workflow
 
@@ -103,6 +108,7 @@ pnpm -r typecheck
 ```
 
 Notes:
+
 - `packages/db/drizzle.config.ts` reads compiled schema from `dist/schema/*.js`
 - `pnpm db:generate` compiles `packages/db` first
 
