@@ -38,6 +38,7 @@
     "@bedlam/adapter-gemini-local": "workspace:*",
     "@bedlam/adapter-openclaw-gateway": "workspace:*",
     "@bedlam/adapter-opencode-local": "workspace:*",
+    "@bedlam/adapter-openrouter": "workspace:*",
     "@bedlam/adapter-pi-local": "workspace:*",
     "@bedlam/adapter-utils": "workspace:*",
     "@bedlam/shared": "workspace:*",

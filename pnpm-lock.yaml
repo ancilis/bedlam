@@ -204,6 +204,19 @@ importers:
         specifier: ^5.7.3
         version: 5.9.3
 
+  packages/adapters/openrouter:
+    dependencies:
+      '@bedlam/adapter-utils':
+        specifier: workspace:*
+        version: link:../../adapter-utils
+    devDependencies:
+      '@types/node':
+        specifier: ^24.6.0
+        version: 24.12.0
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
+
   packages/adapters/pi-local:
     dependencies:
       '@bedlam/adapter-utils':
@@ -458,6 +471,9 @@ importers:
       '@bedlam/adapter-opencode-local':
         specifier: workspace:*
         version: link:../packages/adapters/opencode-local
+      '@bedlam/adapter-openrouter':
+        specifier: workspace:*
+        version: link:../packages/adapters/openrouter
       '@bedlam/adapter-pi-local':
         specifier: workspace:*
         version: link:../packages/adapters/pi-local
@@ -597,6 +613,9 @@ importers:
       '@bedlam/adapter-opencode-local':
         specifier: workspace:*
         version: link:../packages/adapters/opencode-local
+      '@bedlam/adapter-openrouter':
+        specifier: workspace:*
+        version: link:../packages/adapters/openrouter
       '@bedlam/adapter-pi-local':
         specifier: workspace:*
         version: link:../packages/adapters/pi-local

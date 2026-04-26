@@ -26,6 +26,7 @@ When a heartbeat fires, Bedlam:
 | Cursor | `cursor` | Runs Cursor in background mode |
 | Pi Local | `pi_local` | Runs an embedded Pi agent locally |
 | OpenClaw Gateway | `openclaw_gateway` | Connects to an OpenClaw gateway endpoint (upstream Paperclip ecosystem adapter) |
+| [OpenRouter](/adapters/openrouter) | `openrouter` | Calls any model via OpenRouter API — Anthropic, OpenAI, Google, Meta, and more |
 | [Process](/adapters/process) | `process` | Executes arbitrary shell commands |
 | [HTTP](/adapters/http) | `http` | Sends webhooks to external agents |
 

@@ -83,6 +83,14 @@ import {
 } from "hermes-paperclip-adapter";
 import { processAdapter } from "./process/index.js";
 import { httpAdapter } from "./http/index.js";
+import {
+  execute as openRouterExecute,
+  testEnvironment as openRouterTestEnvironment,
+} from "@bedlam/adapter-openrouter/server";
+import {
+  agentConfigurationDoc as openRouterAgentConfigurationDoc,
+  models as openRouterModels,
+} from "@bedlam/adapter-openrouter";
 
 const claudeLocalAdapter: ServerAdapterModule = {
   type: "claude_local",
@@ -224,6 +232,15 @@ const hermesLocalAdapter: ServerAdapterModule = {
   detectModel: () => detectModelFromHermes(),
 };
 
+const openRouterAdapter: ServerAdapterModule = {
+  type: "openrouter",
+  execute: openRouterExecute,
+  testEnvironment: openRouterTestEnvironment,
+  models: openRouterModels,
+  supportsLocalAgentJwt: false,
+  agentConfigurationDoc: openRouterAgentConfigurationDoc,
+};
+
 const adaptersByType = new Map<string, ServerAdapterModule>(
   [
     claudeLocalAdapter,
@@ -234,6 +251,7 @@ const adaptersByType = new Map<string, ServerAdapterModule>(
     geminiLocalAdapter,
     openclawGatewayAdapter,
     hermesLocalAdapter,
+    openRouterAdapter,
     processAdapter,
     httpAdapter,
   ].map((a) => [a.type, a]),
