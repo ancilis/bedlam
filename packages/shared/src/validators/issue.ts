@@ -53,6 +53,14 @@ export const createIssueSchema = z.object({
   ]).optional().nullable(),
   executionWorkspaceSettings: issueExecutionWorkspaceSettingsSchema.optional().nullable(),
   labelIds: z.array(z.string().uuid()).optional(),
+  // Block coordination & human-attention surfacing.
+  // blockedByIssueIds: structured deps for auto-unblock by InternalScheduler.
+  // needsHumanAt: surfaces issue in daily-status doc as needing human attention.
+  blockedByIssueIds: z.array(z.string().uuid()).optional().nullable(),
+  blockedReason: z.string().optional().nullable(),
+  needsHumanAt: z.string().datetime().optional().nullable(),
+  needsHumanReason: z.string().optional().nullable(),
+  selfFixAttempts: z.number().int().nonnegative().optional(),
 });
 
 export type CreateIssue = z.infer<typeof createIssueSchema>;

@@ -19,18 +19,26 @@ Agents evaluate their own outputs before surfacing results. Reflexion loops are 
 ### Dynamic Model Routing
 Model assignment is based on task type, not a static config. Design-heavy and architecture work routes to Opus or GPT-4-class models. Standard execution routes to Sonnet-class. Mechanical and repetitive tasks route to Haiku-class. The CTO agent can patch model assignments dynamically before waking agents via the Paperclip API.
 
-### Custom Agent Persona System (AGENTS.md + SOUL.md)
+### Custom Agent Persona System ([AGENTS.md](http://AGENTS.md) + [SOUL.md](http://SOUL.md))
+
 Each agent has two definition files:
-- **AGENTS.md** — role, responsibilities, decision authority, escalation paths, and operational rules
-- **SOUL.md** — personality, communication style, values, and behavioral defaults
+
+- [**AGENTS.md**](http://AGENTS.md) — role, responsibilities, decision authority, escalation paths, and operational rules
+- [**SOUL.md**](http://SOUL.md) — personality, communication style, values, and behavioral defaults
 
 This gives agents consistent, predictable identities across long-running sessions and multi-agent collaborations.
 
 ### AOA Heartbeat Protocols
+
 Agents emit structured heartbeat signals during execution. These signals carry task state, confidence levels, and dependency flags. Other agents and the control plane use heartbeats to coordinate sequencing, detect stalls, and trigger interventions without polling.
 
 ### Turnkey Local Deployment
+
 Bedlam is designed to run entirely on your own hardware. Embedded Postgres ships in the box for zero-config local runs. Docker Compose configs are included for containerized deployments. No cloud account required.
+
+### Blocker Autonomy
+
+Issues have structured blocker fields (`blockedByIssueIds`, `blockedReason`, `needsHumanAt`, `needsHumanReason`, `selfFixAttempts`). An in-process scheduler auto-unblocks issues when their dependencies complete (`blocker_reconciler`), flags blocked-too-long issues for human attention (`stale_blocked_escalator`), and writes a human-readable daily status digest (`daily_status_writer`). A behavior contract for engineer agents (`docs/agent-contracts/block-handling.md`) ensures agents try self-fix before blocking and use `needsHumanAt` for auth/credential issues. Operators see only what genuinely needs them, not a full blocked queue. See `docs/blocker-autonomy.md`.
 
 ---
 
@@ -41,6 +49,7 @@ Bedlam is designed to run entirely on your own hardware. Embedded Postgres ships
 pnpm install
 
 # Start with embedded database (no setup required)
+```
 pnpm dev
 ```
 

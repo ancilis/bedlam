@@ -655,6 +655,26 @@ export async function startServer(): Promise<StartedServer> {
       void runScheduledBackup();
     }, backupIntervalMs);
   }
+
+  // InternalScheduler — in-process recurring tasks (daily status writer,
+  // blocker reconciler, stale-blocked escalator). Replaces external cron /
+  // launchd / systemd for these specific tasks.
+  //
+  // Configuration:
+  //   BEDLAM_INTERNAL_SCHEDULER_ENABLED=false  disable all jobs
+  //   BEDLAM_DAILY_STATUS_SCRIPT=/path/to.py   path to daily-status script
+  //                                            (if unset, daily_status_writer
+  //                                            is skipped — blocker_reconciler
+  //                                            and stale_blocked_escalator
+  //                                            still run)
+  if (process.env.BEDLAM_INTERNAL_SCHEDULER_ENABLED !== "false") {
+    const { createInternalScheduler } = await import("./services/internal-scheduler.js");
+    const internalScheduler = createInternalScheduler({
+      db: db as any,
+      dailyStatusScript: process.env.BEDLAM_DAILY_STATUS_SCRIPT,
+    });
+    internalScheduler.start();
+  }
   
   await new Promise<void>((resolveListen, rejectListen) => {
     const onError = (err: Error) => {
