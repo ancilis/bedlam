@@ -55,6 +55,14 @@ export const issues = pgTable(
     completedAt: timestamp("completed_at", { withTimezone: true }),
     cancelledAt: timestamp("cancelled_at", { withTimezone: true }),
     hiddenAt: timestamp("hidden_at", { withTimezone: true }),
+    // Block coordination & escalation — used by the InternalScheduler's
+    // blocker_reconciler (auto-unblocks when blockedByIssueIds resolve)
+    // and stale_blocked_escalator (sets needsHumanAt on blocked-too-long issues).
+    blockedByIssueIds: uuid("blocked_by_issue_ids").array(),
+    blockedReason: text("blocked_reason"),
+    needsHumanAt: timestamp("needs_human_at", { withTimezone: true }),
+    needsHumanReason: text("needs_human_reason"),
+    selfFixAttempts: integer("self_fix_attempts").notNull().default(0),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
@@ -75,6 +83,7 @@ export const issues = pgTable(
     originIdx: index("issues_company_origin_idx").on(table.companyId, table.originKind, table.originId),
     projectWorkspaceIdx: index("issues_company_project_workspace_idx").on(table.companyId, table.projectWorkspaceId),
     executionWorkspaceIdx: index("issues_company_execution_workspace_idx").on(table.companyId, table.executionWorkspaceId),
+    needsHumanIdx: index("issues_company_needs_human_idx").on(table.companyId, table.needsHumanAt),
     identifierIdx: uniqueIndex("issues_identifier_idx").on(table.identifier),
     openRoutineExecutionIdx: uniqueIndex("issues_open_routine_execution_uq")
       .on(table.companyId, table.originKind, table.originId)

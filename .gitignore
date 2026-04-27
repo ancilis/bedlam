@@ -54,3 +54,7 @@ test-results/
 
 # Misc
 *.local
+
+# Python
+__pycache__/
+*.pyc
