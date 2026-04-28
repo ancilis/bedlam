@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Bedlam macOS LaunchAgent template.
+
+  Do NOT edit and load this file directly. The placeholders below
+  ({{HOME}}, {{REPO}}, {{JWT}}) must be filled in first.
+
+  Use scripts/macos/install.sh from the bedlam repo root to:
+    1. Generate a populated copy at ~/Library/LaunchAgents/ai.bedlam.dev.plist
+    2. Bootstrap it into your GUI session (gui/$UID)
+
+  See docs/deploy/macos-launchagent.md for the rationale and the manual
+  install path if you'd rather not run the script.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>ai.bedlam.dev</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/pnpm</string>
+        <string>dev:once</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>{{REPO}}</string>
+
+    <!-- Start when the LaunchAgent is loaded (e.g. at login) -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!--
+      Restart only on abnormal exit. A clean exit (e.g. you ran
+      `launchctl bootout` to stop it) will NOT trigger a restart.
+    -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+        <key>Crashed</key>
+        <true/>
+    </dict>
+
+    <!-- Prevent fast crash loops if Bedlam fails to start -->
+    <key>ThrottleInterval</key>
+    <integer>15</integer>
+
+    <!--
+      Interactive process type signals to launchd that this is a foreground
+      developer service, not a background daemon. It gets normal scheduling
+      priority and is not aggressively jetsammed.
+    -->
+    <key>ProcessType</key>
+    <string>Interactive</string>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/bedlam-launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/bedlam-launchd.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <!--
+          launchd does not source your shell profile. PATH must include
+          the locations of node, pnpm, and any tooling Bedlam shells out to
+          (claude, codex, etc.). Adjust if you use Intel Homebrew (/usr/local)
+          or non-default install paths.
+        -->
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:{{HOME}}/.local/bin</string>
+
+        <key>HOME</key>
+        <string>{{HOME}}</string>
+        <key>USER</key>
+        <string>{{USER}}</string>
+        <key>LOGNAME</key>
+        <string>{{USER}}</string>
+        <key>SHELL</key>
+        <string>/bin/zsh</string>
+
+        <!--
+          8 GB heap. The default Node heap (~4 GB) is not enough for a
+          long-running Bedlam dev server with many active agent runs and
+          will eventually crash with "Ineffective mark-compacts near
+          heap limit".
+        -->
+        <key>NODE_OPTIONS</key>
+        <string>--max-old-space-size=8192</string>
+
+        <!--
+          Required for adapters that mint short-lived agent JWTs. Set this
+          to the same value used elsewhere in your deployment, or generate
+          a fresh 64-character hex secret and use it consistently.
+        -->
+        <key>BEDLAM_AGENT_JWT_SECRET</key>
+        <string>{{JWT}}</string>
+
+        <key>BEDLAM_MIGRATION_AUTO_APPLY</key>
+        <string>true</string>
+        <key>BEDLAM_MIGRATION_PROMPT</key>
+        <string>never</string>
+    </dict>
+</dict>
+</plist>

@@ -44,24 +44,35 @@ Issues have structured blocker fields (`blockedByIssueIds`, `blockedReason`, `ne
 
 ## Quick Start
 
-```sh
-# Install dependencies
-pnpm install
+The fastest way to get Bedlam running:
 
-# Start with embedded database (no setup required)
+```sh
+npx bedlam onboard --yes
 ```
+
+This walks through setup, configures your environment, and starts the server at `http://localhost:3100`. Re-running `onboard` keeps your existing config and data. Use `bedlam configure` to edit settings later.
+
+Subsequent runs:
+
+```sh
+npx bedlam run
+```
+
+### Working from a clone (contributors)
+
+```sh
+pnpm install
 pnpm dev
 ```
-
-Server: `http://localhost:3100`
-API health: `http://localhost:3100/api/health`
 
 To reset the local dev database:
 
 ```sh
-rm -rf data/pglite
+rm -rf ~/.bedlam/instances/default/db
 pnpm dev
 ```
+
+For long-running deployments, see [Production Deployment](#production-deployment-macos) below — don't run `pnpm dev` in a terminal forever.
 
 ---
 
@@ -72,6 +83,7 @@ server/       Express REST API and orchestration services
 ui/           React + Vite board UI
 cli/          CLI for setup, onboarding, and control-plane commands
 packages/
+```
   db/         Drizzle schema, migrations, DB clients
   shared/     Shared types, constants, validators, API path constants
   adapters/   Agent adapter implementations (Claude, Codex, Cursor, Gemini, etc.)
@@ -129,6 +141,22 @@ See `doc/DOCKER.md` for full deployment options.
 
 ---
 
+## Production Deployment (macOS)
+
+For long-running deployments on a Mac, supervise the process with a LaunchAgent rather than `pnpm dev` in a terminal. The repo includes a one-command installer:
+
+```sh
+./scripts/macos/install.sh
+```
+
+This generates a fresh agent JWT secret, installs `~/Library/LaunchAgents/ai.bedlam.dev.plist`, and bootstraps the agent into your GUI session domain (`gui/$UID`) so adapters that depend on the GUI security context (Claude Code subscription auth, SSH agent forwarding) work correctly.
+
+The LaunchAgent uses `KeepAlive` for crash recovery and an 8 GB Node heap. See [`docs/deploy/macos-launchagent.md`](docs/deploy/macos-launchagent.md) for the full rationale, lifecycle commands, troubleshooting, and the manual install path.
+
+For Linux, the equivalent pattern is a `systemd --user` unit. A reference unit is on the roadmap.
+
+---
+
 ## Model Routing
 
 Bedlam uses a three-tier routing model:
@@ -151,7 +179,9 @@ See `CONTRIBUTING.md` and `AGENTS.md` for contribution guidelines and repo conve
 
 ## Built With Bedlam
 
-Bedlam is the internal agent orchestration platform used to build [Ancilis](https://ancilis.ai) — agent compliance intelligence for enterprise AI deployments. The Ancilis engineering team runs a 16-agent Bedlam deployment to develop the platform, with the enhancements in this repo developed and battle-tested in that context.
+Bedlam is the internal agent orchestration platform used to build [Ancilis](https://ancilis.ai) — agent compliance intelligence for enterprise AI deployments. The Ancilis engineering team runs a multi-team Bedlam deployment to develop the platform, with the enhancements in this repo developed and battle-tested in that context.
+
+Operationally, the production-grade pattern we use is documented in `docs/deploy/macos-launchagent.md`: a supervised LaunchAgent loaded into the user's GUI session domain, with `KeepAlive` for crash recovery and an 8 GB Node heap. The `scripts/macos/install.sh` installer in this repo materializes that setup in one command. We previously used a cron-based watchdog and migrated off it because cron-spawned processes can't access the macOS keychain entries that subscription-auth adapters (notably `claude_local`) depend on.
 
 ---
 
