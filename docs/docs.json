@@ -76,6 +76,7 @@
             "pages": [
               "deploy/overview",
               "deploy/local-development",
+              "deploy/macos-launchagent",
               "deploy/tailscale-private-access",
               "deploy/docker",
               "deploy/deployment-modes",
