@@ -8,19 +8,22 @@ The `claude_local` adapter runs Anthropic's Claude Code CLI locally. It supports
 ## Prerequisites
 
 - Claude Code CLI installed (`claude` command available)
-- `ANTHROPIC_API_KEY` set in the environment or agent config
+- One of:
+  - **Subscription auth (Pro/Max).** Run `claude /login` in a terminal once. Tokens are stored in the macOS keychain. On macOS, the Bedlam process must run under your GUI session domain for the CLI to read them — see [macOS LaunchAgent](/deploy/macos-launchagent) for the supervised setup.
+  - **API key auth.** Set `ANTHROPIC_API_KEY` in the environment or agent config.
 
 ## Configuration Fields
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `cwd` | string | Yes | Working directory for the agent process (absolute path; created automatically if missing when permissions allow) |
-| `model` | string | No | Claude model to use (e.g. `claude-opus-4-6`) |
+| `model` | string | No | Claude model to use (e.g. `claude-opus-4-6`, `claude-opus-4-7`, `claude-sonnet-4-6`) |
+| `effort` | string | No | Reasoning effort level: `low`, `medium`, `high`, `xhigh`, or `max`. Passed through to `claude --effort`. Higher levels increase latency and token use. |
 | `promptTemplate` | string | No | Prompt used for all runs |
 | `env` | object | No | Environment variables (supports secret refs) |
-| `timeoutSec` | number | No | Process timeout (0 = no timeout) |
+| `timeoutSec` | number | No | Process timeout in seconds (0 = no timeout) |
 | `graceSec` | number | No | Grace period before force-kill |
-| `maxTurnsPerRun` | number | No | Max agentic turns per heartbeat (defaults to `300`) |
+| `maxTurnsPerRun` | number | No | Max agentic turns per heartbeat. `0` (default) means no cap; the CLI runs until the model decides it's done or `timeoutSec` fires. |
 | `dangerouslySkipPermissions` | boolean | No | Skip permission prompts (dev only) |
 
 ## Prompt Templates
