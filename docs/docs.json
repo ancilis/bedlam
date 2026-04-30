@@ -16,7 +16,7 @@
   "topbarLinks": [
     {
       "name": "GitHub",
-      "url": "https://github.com/bedlam-ai/bedlam"
+      "url": "https://github.com/ancilis/bedlam"
     }
   ],
   "navigation": {
@@ -97,6 +97,8 @@
               "adapters/overview",
               "adapters/claude-local",
               "adapters/codex-local",
+              "adapters/gemini-local",
+              "adapters/openrouter",
               "adapters/hermes-local",
               "adapters/process",
               "adapters/http",
@@ -142,6 +144,6 @@
     ]
   },
   "footerSocials": {
-    "github": "https://github.com/bedlam-ai/bedlam"
+    "github": "https://github.com/ancilis/bedlam"
   }
 }
