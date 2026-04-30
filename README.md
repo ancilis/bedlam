@@ -17,7 +17,7 @@ Agents communicate indirectly through shared environmental state rather than dir
 Agents evaluate their own outputs before surfacing results. Reflexion loops are built into the execution pipeline: an agent produces a result, critiques it against defined quality criteria, and iterates until the output meets the bar or escalates to a human approver.
 
 ### Dynamic Model Routing
-Model assignment is based on task type, not a static config. Design-heavy and architecture work routes to Opus or GPT-4-class models. Standard execution routes to Sonnet-class. Mechanical and repetitive tasks route to Haiku-class. The CTO agent can patch model assignments dynamically before waking agents via the Paperclip API.
+Model assignment is based on task type, not a static config. Design-heavy and architecture work routes to frontier-tier models (Claude Opus, OpenAI o3/GPT-5). Standard execution routes to Sonnet-class. Mechanical and repetitive tasks route to Haiku-class. The CTO agent can patch model assignments dynamically before waking agents via the API. With the OpenRouter adapter, the same routing logic spans any model available on [openrouter.ai](https://openrouter.ai) — Anthropic, OpenAI, Google, Meta, DeepSeek, Mistral, xAI, and more — through a single API key.
 
 ### Custom Agent Persona System ([AGENTS.md](http://AGENTS.md) + [SOUL.md](http://SOUL.md))
 
@@ -79,19 +79,61 @@ For long-running deployments, see [Production Deployment](#production-deployment
 ## Repo Structure
 
 ```
-server/       Express REST API and orchestration services
-ui/           React + Vite board UI
-cli/          CLI for setup, onboarding, and control-plane commands
+server/                Express REST API and orchestration services
+ui/                    React + Vite board UI
+cli/                   CLI for setup, onboarding, and control-plane commands
 packages/
+  db/                  Drizzle schema, migrations, DB clients
+  shared/              Shared types, constants, validators, API path constants
+  adapter-utils/       Shared utilities for adapter implementations
+  adapters/            Agent adapter implementations (see Adapters section)
+  plugins/             Plugin system packages
+doc/                   Operational and product docs
+docs/                  Public documentation (Mintlify)
+skills/                Reusable agent skill definitions
 ```
-  db/         Drizzle schema, migrations, DB clients
-  shared/     Shared types, constants, validators, API path constants
-  adapters/   Agent adapter implementations (Claude, Codex, Cursor, Gemini, etc.)
-  plugins/    Plugin system packages
-doc/          Operational and product docs
-docs/         Public documentation (Mintlify)
-skills/       Reusable agent skill definitions
+
+---
+
+## Adapters
+
+Adapters connect Bedlam's orchestration layer to specific agent runtimes. Each adapter knows how to invoke an agent, capture its output, and report token usage. You pick the adapter per-agent — different agents in the same company can run on different runtimes.
+
+| Adapter | Type Key | What It Runs |
+|---------|----------|--------------|
+| Claude Local | `claude_local` | Claude Code CLI, locally |
+| Codex Local | `codex_local` | OpenAI Codex CLI, locally |
+| Gemini Local | `gemini_local` | Gemini CLI, locally |
+| OpenCode Local | `opencode_local` | OpenCode CLI, multi-provider via `provider/model` |
+| Cursor | `cursor` | Cursor in background mode |
+| Pi Local | `pi_local` | Embedded Pi agent, locally |
+| OpenClaw Gateway | `openclaw_gateway` | Upstream Paperclip ecosystem gateway endpoint |
+| **OpenRouter** | `openrouter` | **Any model on OpenRouter — Anthropic, OpenAI, Google, Meta, DeepSeek, Mistral, xAI, and more — through a single API key** |
+| Process | `process` | Arbitrary shell commands |
+| HTTP | `http` | Webhooks to external agents |
+
+### OpenRouter
+
+The OpenRouter adapter lets you route any agent to any model available on [openrouter.ai](https://openrouter.ai) using one API key and one billing account. Useful when you want different agents on different providers without managing separate credentials, or when you need access to models that don't have a dedicated CLI adapter (Llama, Mistral, Grok, DeepSeek, etc.).
+
+```json
+{
+  "adapterType": "openrouter",
+  "adapterConfig": {
+    "apiKey": "sk-or-...",
+    "model": "anthropic/claude-sonnet-4-5",
+    "instructionsFilePath": "/absolute/path/to/AGENTS.md",
+    "maxTokens": 4096,
+    "temperature": 0.5
+  }
+}
 ```
+
+Specify any model in `provider/model` format — `anthropic/claude-opus-4`, `openai/gpt-4.1`, `openai/o3`, `google/gemini-2.5-pro`, `meta-llama/llama-4-maverick`, `deepseek/deepseek-r2`, `x-ai/grok-3`. Token usage is captured from the response and attributed to the `openrouter` biller for cost tracking. Full reference: `docs/adapters/openrouter.md`.
+
+### Building Your Own Adapter
+
+Each adapter is a workspace package under `packages/adapters/<name>/` with a server module (executes the agent), a UI module (renders run transcripts and config forms), and a CLI module (formats output for `bedlam run --watch`). See `docs/adapters/creating-an-adapter.md`.
 
 ---
 
@@ -159,13 +201,15 @@ For Linux, the equivalent pattern is a `systemd --user` unit. A reference unit i
 
 ## Model Routing
 
-Bedlam uses a three-tier routing model:
+Bedlam uses a three-tier routing model. Tier assignment is based on task type, not a static config — the CTO agent can patch model assignments dynamically before waking agents via the API.
 
-| Tier | Models | Use For |
-|------|--------|---------|
-| Design | Opus, GPT-4.5 | Architecture, strategy, complex reasoning |
-| Execution | Sonnet | Standard task execution, code, analysis |
-| Mechanical | Haiku | Formatting, classification, repetitive transforms |
+| Tier | Examples (direct adapters) | Examples (via OpenRouter) | Use For |
+|------|----------------------------|---------------------------|---------|
+| Design | Claude Opus, GPT-5 (Codex) | `anthropic/claude-opus-4`, `openai/o3` | Architecture, strategy, complex reasoning |
+| Execution | Claude Sonnet | `anthropic/claude-sonnet-4-5`, `openai/gpt-4.1`, `google/gemini-2.5-pro` | Standard task execution, code, analysis |
+| Mechanical | Claude Haiku | `anthropic/claude-haiku-3-5`, `openai/gpt-4.1-mini` | Formatting, classification, repetitive transforms |
+
+Direct CLI adapters (`claude_local`, `codex_local`, `gemini_local`, `opencode_local`, `hermes_local`) give you tool execution, streaming output, and subscription auth. The OpenRouter adapter gives you breadth — any model on OpenRouter, one API key, unified billing — at the cost of CLI tool execution. Mix and match: code-writing agents on direct CLI adapters, reasoning and reviewer agents on OpenRouter, mechanical agents on whichever is cheapest.
 
 Configure adapters in `packages/adapters/`. The dynamic routing layer selects tier based on task metadata before agent execution begins.
 
