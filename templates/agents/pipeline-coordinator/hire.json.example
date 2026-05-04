@@ -1,0 +1,33 @@
+{
+  "name": "Pipeline Coordinator",
+  "role": "devops",
+  "title": "Engineering Pipeline Throughput Coordinator",
+  "icon": "radar",
+  "reportsTo": "<your-cto-or-engineering-manager-agent-id>",
+  "capabilities": "Watches the pipeline of work across engineers, reviewers, and the Merger. Enforces 24h review SLAs (reassigns to other reviewer cross-pool), reverts in_progress issues with no commits in 5+ days, comments with redirects, posts daily Pipeline Health Report with throughput metrics. Authorized interventions: reassign reviews, revert stale in_progress, comment+tag, warn agents posting > shipping. Escalates: agent pause, issue close, stale-PR kill, structural prompt issues.",
+  "adapterType": "codex_local",
+  "adapterConfig": {
+    "cwd": "<absolute-path-to-a-repo-clone-with-gh-auth>",
+    "env": {
+      "GIT_AUTHOR_NAME": {"type": "plain", "value": "pipeline-coordinator"},
+      "GIT_AUTHOR_EMAIL": {"type": "plain", "value": "agents@example.com"},
+      "GIT_COMMITTER_NAME": {"type": "plain", "value": "pipeline-coordinator"},
+      "GIT_COMMITTER_EMAIL": {"type": "plain", "value": "agents@example.com"}
+    },
+    "model": "<your-model-id>",
+    "graceSec": 15,
+    "timeoutSec": 4200,
+    "maxTurnsPerRun": 60,
+    "model_reasoning_effort": "high",
+    "dangerouslyBypassApprovalsAndSandbox": true
+  },
+  "runtimeConfig": {
+    "heartbeat": {
+      "enabled": true,
+      "cooldownSec": 30,
+      "intervalSec": 3600,
+      "wakeOnDemand": true,
+      "maxConcurrentRuns": 1
+    }
+  }
+}

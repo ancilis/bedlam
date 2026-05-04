@@ -40,6 +40,23 @@ Bedlam is designed to run entirely on your own hardware. Embedded Postgres ships
 
 Issues have structured blocker fields (`blockedByIssueIds`, `blockedReason`, `needsHumanAt`, `needsHumanReason`, `selfFixAttempts`). An in-process scheduler auto-unblocks issues when their dependencies complete (`blocker_reconciler`), flags blocked-too-long issues for human attention (`stale_blocked_escalator`), and writes a human-readable daily status digest (`daily_status_writer`). A behavior contract for engineer agents (`docs/agent-contracts/block-handling.md`) ensures agents try self-fix before blocking and use `needsHumanAt` for auth/credential issues. Operators see only what genuinely needs them, not a full blocked queue. See `docs/blocker-autonomy.md`.
 
+### Follow-Through Agent Templates
+
+A common failure mode of agent-driven engineering: agents open PRs, lose interest, pick up new work, and unmerged PRs accumulate into 30–60+ orphan branches and dozens of `in_review` tickets that never close. Bedlam ships production-tested templates that close this loop:
+
+- **Merger** — lands approved PRs (squash-merge, branch delete, issue close, dependent-issue unblock); reverts the merge if main CI goes red within 10 minutes
+- **Branch Steward** — daily branch reaping with Bedlam cross-reference; deletes merged-into-main branches, archives premature ones, comments on ghost branches
+- **Pipeline Coordinator** — hourly SLA enforcement (24h review SLA → cross-pool reassignment), reverts stale `in_progress`, posts daily Pipeline Health Report with throughput metrics
+
+Plus two drop-in `AGENTS.md` blocks for existing agents:
+
+- `engineer-definition-of-done.md` — the 5 done criteria + after-PR follow-through + idle-fallback rules
+- `reviewer-review-sla.md` — 24h review SLA + cross-pool reassignment behavior
+
+Plus a scheduler rule (reference Python implementation): **1 issue `in_progress` per engineer**, with auto-revert of excess to `todo`.
+
+See [`templates/`](./templates/) for the agents and blocks; [`docs/agent-contracts/`](./docs/agent-contracts/) for the policy specs (definition-of-done, review-sla, in-progress-cap).
+
 ---
 
 ## Quick Start
