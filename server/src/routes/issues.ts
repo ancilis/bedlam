@@ -44,6 +44,25 @@ const updateIssueRouteSchema = updateIssueSchema.extend({
   interrupt: z.boolean().optional(),
 });
 
+export function isInlineSafeIssueAttachmentContentType(contentType: string | null | undefined) {
+  const normalized = (contentType ?? "").split(";")[0]?.trim().toLowerCase();
+  return normalized !== "text/html" && normalized !== "image/svg+xml" && normalized !== "application/xhtml+xml";
+}
+
+function sanitizeHeaderFilename(filename: string | null | undefined) {
+  const cleaned = (filename ?? "attachment")
+    .replace(/[\u0000-\u001f\u007f]/g, "_")
+    .replace(/["\\;]/g, "_")
+    .replace(/_+/g, "_")
+    .trim();
+  return cleaned || "attachment";
+}
+
+export function contentDispositionForIssueAttachment(filename: string | null | undefined, contentType: string | null | undefined) {
+  const disposition = isInlineSafeIssueAttachmentContentType(contentType) ? "inline" : "attachment";
+  return `${disposition}; filename="${sanitizeHeaderFilename(filename)}"`;
+}
+
 export function issueRoutes(db: Db, storage: StorageService) {
   const router = Router();
   const svc = issueService(db);
@@ -1797,8 +1816,14 @@ export function issueRoutes(db: Db, storage: StorageService) {
     res.setHeader("Content-Type", attachment.contentType || object.contentType || "application/octet-stream");
     res.setHeader("Content-Length", String(attachment.byteSize || object.contentLength || 0));
     res.setHeader("Cache-Control", "private, max-age=60");
-    const filename = attachment.originalFilename ?? "attachment";
-    res.setHeader("Content-Disposition", `inline; filename=\"${filename.replaceAll("\"", "")}\"`);
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    if (!isInlineSafeIssueAttachmentContentType(attachment.contentType || object.contentType)) {
+      res.setHeader("Content-Security-Policy", "sandbox; default-src 'none'");
+    }
+    res.setHeader(
+      "Content-Disposition",
+      contentDispositionForIssueAttachment(attachment.originalFilename, attachment.contentType || object.contentType),
+    );
 
     object.stream.on("error", (err) => {
       next(err);

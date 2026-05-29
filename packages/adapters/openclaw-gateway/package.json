@@ -2,13 +2,13 @@
   "name": "@bedlam/adapter-openclaw-gateway",
   "version": "0.3.1",
   "license": "MIT",
-  "homepage": "https://github.com/bedlam/bedlam",
+  "homepage": "https://github.com/ancilis/bedlam",
   "bugs": {
-    "url": "https://github.com/bedlam/bedlam/issues"
+    "url": "https://github.com/ancilis/bedlam/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bedlam/bedlam",
+    "url": "https://github.com/ancilis/bedlam",
     "directory": "packages/adapters/openclaw-gateway"
   },
   "type": "module",
@@ -52,7 +52,7 @@
   "dependencies": {
     "@bedlam/adapter-utils": "workspace:*",
     "picocolors": "^1.1.1",
-    "ws": "^8.19.0"
+    "ws": "^8.21.0"
   },
   "devDependencies": {
     "@types/node": "^24.6.0",

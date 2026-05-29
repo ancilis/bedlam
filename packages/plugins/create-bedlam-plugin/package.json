@@ -2,13 +2,13 @@
   "name": "@bedlam/create-bedlam-plugin",
   "version": "0.1.0",
   "license": "MIT",
-  "homepage": "https://github.com/bedlam/bedlam",
+  "homepage": "https://github.com/ancilis/bedlam",
   "bugs": {
-    "url": "https://github.com/bedlam/bedlam/issues"
+    "url": "https://github.com/ancilis/bedlam/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bedlam/bedlam",
+    "url": "https://github.com/ancilis/bedlam",
     "directory": "packages/plugins/create-bedlam-plugin"
   },
   "type": "module",

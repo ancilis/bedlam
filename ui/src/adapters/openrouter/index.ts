@@ -5,10 +5,12 @@ import { OpenRouterConfigFields } from "./config-fields";
 export const openRouterUIAdapter: UIAdapterModule = {
   type: "openrouter",
   label: "OpenRouter",
-  parseStdoutLine: (line: string) => {
+  parseStdoutLine: (line: string, ts: string) => {
     const parsed = parseOpenRouterStdoutLine(line);
-    if (!parsed) return null;
-    return parsed.type === "output" ? { type: "message", text: parsed.text } : null;
+    if (!parsed) return [];
+    if (parsed.type === "output") return [{ kind: "assistant", ts, text: parsed.text }];
+    if (parsed.type === "error") return [{ kind: "stderr", ts, text: parsed.text }];
+    return [{ kind: "system", ts, text: parsed.text }];
   },
   ConfigFields: OpenRouterConfigFields,
   buildAdapterConfig: buildOpenRouterConfig,
