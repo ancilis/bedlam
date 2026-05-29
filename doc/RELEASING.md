@@ -4,7 +4,7 @@ Maintainer runbook for shipping Bedlam across npm, GitHub, and the website-facin
 
 The release model is now commit-driven:
 
-1. Every push to `master` publishes a canary automatically.
+1. Every push to `main` publishes a canary automatically.
 2. Stable releases are manually promoted from a chosen tested commit or canary tag.
 3. Stable release notes live in `releases/vYYYY.MDD.P.md`.
 4. Only stable releases get GitHub Releases.
@@ -45,7 +45,7 @@ Canaries only cover the first two surfaces plus an internal traceability tag.
 
 ## Core Invariants
 
-- canaries publish from `master`
+- canaries publish from `main`
 - stables publish from an explicitly chosen source ref
 - tags point at the original source commit, not a generated release commit
 - stable notes are always `releases/vYYYY.MDD.P.md`
@@ -56,7 +56,7 @@ Canaries only cover the first two surfaces plus an internal traceability tag.
 
 ### Canary
 
-Every push to `master` runs the canary path inside [`.github/workflows/release.yml`](../.github/workflows/release.yml).
+Every push to `main` runs the canary path inside [`.github/workflows/release.yml`](../.github/workflows/release.yml).
 
 It:
 
@@ -98,7 +98,7 @@ Before running stable:
 
 Example:
 
-- `source_ref`: `master`
+- `source_ref`: `main`
 - `stable_date`: `2026-03-18`
 - resulting stable version: `2026.318.0`
 
@@ -214,7 +214,7 @@ Do not run stable.
 
 Instead:
 
-1. fix the issue on `master`
+1. fix the issue on `main`
 2. merge the fix
 3. wait for the next automatic canary
 4. rerun smoke testing

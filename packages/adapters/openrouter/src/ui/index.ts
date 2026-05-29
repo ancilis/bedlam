@@ -1,3 +1,5 @@
+import type { CreateConfigValues } from "@bedlam/adapter-utils";
+
 /**
  * Parse OpenRouter stdout lines into transcript entries for the run viewer.
  * OpenRouter returns plain text completions, so lines are treated as agent
@@ -17,7 +19,7 @@ export function parseOpenRouterStdoutLine(line: string): {
 /**
  * Build adapter config JSON from create-agent form values.
  */
-export function buildOpenRouterConfig(values: Record<string, unknown>): Record<string, unknown> {
+export function buildOpenRouterConfig(values: CreateConfigValues): Record<string, unknown> {
   const config: Record<string, unknown> = {};
   if (values.apiKey) config.apiKey = values.apiKey;
   if (values.model) config.model = values.model;

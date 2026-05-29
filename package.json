@@ -42,7 +42,7 @@
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "cross-env": "^10.1.0",
-    "esbuild": "^0.27.3",
+    "esbuild": "^0.28.0",
     "typescript": "^5.7.3",
     "vitest": "^3.0.5"
   },
@@ -51,6 +51,20 @@
   },
   "packageManager": "pnpm@9.15.4",
   "pnpm": {
+    "overrides": {
+      "vitest>vite": "7.3.3",
+      "vite-node>vite": "7.3.3",
+      "@esbuild-kit/core-utils>esbuild": "0.25.12",
+      "vite>esbuild": "0.25.12",
+      "picomatch": "4.0.4",
+      "qs": "6.15.2",
+      "router>path-to-regexp": "8.4.2"
+    },
+    "auditConfig": {
+      "ignoreGhsas": [
+        "GHSA-6cpc-mj5c-m9rq"
+      ]
+    },
     "patchedDependencies": {
       "embedded-postgres@18.1.0-beta.16": "patches/embedded-postgres@18.1.0-beta.16.patch"
     }

@@ -4,6 +4,10 @@ import {
   matchesContentType,
   DEFAULT_ALLOWED_TYPES,
 } from "../attachment-types.js";
+import {
+  contentDispositionForIssueAttachment,
+  isInlineSafeIssueAttachmentContentType,
+} from "../routes/issues.js";
 
 describe("parseAllowedTypes", () => {
   it("returns default image types when input is undefined", () => {
@@ -93,5 +97,21 @@ describe("matchesContentType", () => {
     expect(matchesContentType("application/pdf", patterns)).toBe(true);
     expect(matchesContentType("text/plain", patterns)).toBe(true);
     expect(matchesContentType("application/zip", patterns)).toBe(true);
+  });
+});
+
+describe("issue attachment response headers", () => {
+  it("does not serve active document types inline", () => {
+    expect(isInlineSafeIssueAttachmentContentType("text/html")).toBe(false);
+    expect(isInlineSafeIssueAttachmentContentType("image/svg+xml")).toBe(false);
+    expect(contentDispositionForIssueAttachment("report.html", "text/html")).toBe(
+      'attachment; filename="report.html"',
+    );
+  });
+
+  it("sanitizes filenames used in content disposition headers", () => {
+    expect(contentDispositionForIssueAttachment('bad"\r\nx.html', "text/html")).toBe(
+      'attachment; filename="bad_x.html"',
+    );
   });
 });

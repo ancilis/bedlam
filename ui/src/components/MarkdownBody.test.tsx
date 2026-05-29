@@ -46,4 +46,17 @@ describe("MarkdownBody", () => {
     expect(html).toContain('data-mention-kind="project"');
     expect(html).toContain("--bedlam-mention-project-color:#336699");
   });
+
+  it("does not render unsafe markdown links or images as navigable URLs", () => {
+    const html = renderToStaticMarkup(
+      <ThemeProvider>
+        <MarkdownBody>
+          {'[bad](javascript:alert(1)) ![bad](data:text/html,<script>alert(1)</script>)'}
+        </MarkdownBody>
+      </ThemeProvider>,
+    );
+
+    expect(html).not.toContain("javascript:");
+    expect(html).not.toContain("data:text/html");
+  });
 });

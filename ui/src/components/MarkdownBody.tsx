@@ -36,6 +36,30 @@ function extractMermaidSource(children: ReactNode): string | null {
   return flattenText(childProps.children).replace(/\n$/, "");
 }
 
+function isSafeMarkdownUrl(rawUrl: string, opts?: { allowMentionSchemes?: boolean }): boolean {
+  const url = rawUrl.trim();
+  if (!url) return true;
+  if (/[\u0000-\u001f\u007f]/.test(url)) return false;
+  if (url.startsWith("#")) return true;
+  if (url.startsWith("/") && !url.startsWith("//")) return true;
+  if (url.startsWith("./") || url.startsWith("../")) return true;
+  if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(url)) {
+    return !url.startsWith("//");
+  }
+
+  try {
+    const parsed = new URL(url);
+    return ["http:", "https:", "mailto:"].includes(parsed.protocol)
+      || (opts?.allowMentionSchemes === true && ["agent:", "project:"].includes(parsed.protocol));
+  } catch {
+    return false;
+  }
+}
+
+function sanitizeMarkdownUrl(url: string): string {
+  return isSafeMarkdownUrl(url, { allowMentionSchemes: true }) ? url : "";
+}
+
 function MermaidDiagramBlock({ source, darkMode }: { source: string; darkMode: boolean }) {
   const renderId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const [svg, setSvg] = useState<string | null>(null);
@@ -122,8 +146,10 @@ export function MarkdownBody({ children, className, resolveImageSrc }: MarkdownB
           </a>
         );
       }
+      const isMentionScheme = href ? /^(agent|project):/i.test(href.trim()) : false;
+      const safeHref = href && !isMentionScheme && isSafeMarkdownUrl(href) ? href : undefined;
       return (
-        <a href={href} rel="noreferrer">
+        <a href={safeHref} rel="noreferrer">
           {linkChildren}
         </a>
       );
@@ -132,7 +158,14 @@ export function MarkdownBody({ children, className, resolveImageSrc }: MarkdownB
   if (resolveImageSrc) {
     components.img = ({ node: _node, src, alt, ...imgProps }) => {
       const resolved = src ? resolveImageSrc(src) : null;
-      return <img {...imgProps} src={resolved ?? src} alt={alt ?? ""} />;
+      const safeSrc = resolved ?? src;
+      if (!safeSrc || !isSafeMarkdownUrl(safeSrc)) return null;
+      return <img {...imgProps} src={safeSrc} alt={alt ?? ""} />;
+    };
+  } else {
+    components.img = ({ node: _node, src, alt, ...imgProps }) => {
+      if (!src || !isSafeMarkdownUrl(src)) return null;
+      return <img {...imgProps} src={src} alt={alt ?? ""} />;
     };
   }
 
@@ -144,7 +177,7 @@ export function MarkdownBody({ children, className, resolveImageSrc }: MarkdownB
         className,
       )}
     >
-      <Markdown remarkPlugins={[remarkGfm]} components={components} urlTransform={(url) => url}>
+      <Markdown remarkPlugins={[remarkGfm]} components={components} urlTransform={sanitizeMarkdownUrl}>
         {children}
       </Markdown>
     </div>

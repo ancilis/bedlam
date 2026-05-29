@@ -2,13 +2,13 @@
   "name": "@bedlam/db",
   "version": "0.3.1",
   "license": "MIT",
-  "homepage": "https://github.com/bedlam/bedlam",
+  "homepage": "https://github.com/ancilis/bedlam",
   "bugs": {
-    "url": "https://github.com/bedlam/bedlam/issues"
+    "url": "https://github.com/ancilis/bedlam/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/bedlam/bedlam",
+    "url": "https://github.com/ancilis/bedlam",
     "directory": "packages/db"
   },
   "type": "module",
@@ -44,13 +44,13 @@
   },
   "dependencies": {
     "@bedlam/shared": "workspace:*",
-    "drizzle-orm": "^0.38.4",
+    "drizzle-orm": "^0.45.2",
     "embedded-postgres": "^18.1.0-beta.16",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
     "@types/node": "^24.6.0",
-    "drizzle-kit": "^0.31.9",
+    "drizzle-kit": "^0.31.10",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "vitest": "^3.0.5"

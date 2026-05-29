@@ -65,7 +65,7 @@ export function OpenRouterConfigFields({
       </Field>
       <Field label="Max tokens" hint={maxTokensHint}>
         <DraftInput
-          value={isCreate ? values!.maxTokens ?? "" : eff("adapterConfig", "maxTokens", String(config.maxTokens ?? ""))}
+          value={isCreate ? String(values!.maxTokens ?? "") : eff("adapterConfig", "maxTokens", String(config.maxTokens ?? ""))}
           onCommit={(v) => isCreate ? set!({ maxTokens: v ? Number(v) : undefined }) : mark("adapterConfig", "maxTokens", v ? Number(v) : undefined)}
           immediate
           className={inputClass}
@@ -74,7 +74,7 @@ export function OpenRouterConfigFields({
       </Field>
       <Field label="Temperature" hint={temperatureHint}>
         <DraftInput
-          value={isCreate ? values!.temperature ?? "" : eff("adapterConfig", "temperature", String(config.temperature ?? ""))}
+          value={isCreate ? String(values!.temperature ?? "") : eff("adapterConfig", "temperature", String(config.temperature ?? ""))}
           onCommit={(v) => isCreate ? set!({ temperature: v ? Number(v) : undefined }) : mark("adapterConfig", "temperature", v ? Number(v) : undefined)}
           immediate
           className={inputClass}
