@@ -1,14 +1,14 @@
 # Bedlam
 
-**Open-source agent orchestration platform. Deploy a team of AI agents locally with org charts, budgets, governance, and stigmergic coordination.**
+**Bedlam is an open-source, local-first company AI control plane. Run AI agent teams with org charts, governed work loops, budgets, approvals, execution workspaces, model routing, and auditability.**
 
-Bedlam is a modified fork of [Paperclip](https://github.com/paperclipai/paperclip) with significant architectural enhancements for production-grade local agent deployments. It gives you a full control plane for running AI agent companies — complete with org structure, budget enforcement, task governance, and agent-to-agent coordination — without sending your data or workflows to any external service.
+Bedlam lets one operator run an AI-native company end-to-end: define goals, hire agents, assign work, enforce budgets, review approvals, inspect execution, and safely improve the company through auditable control-plane loops.
 
 ---
 
-## What's Different from Paperclip
+## What Bedlam Provides
 
-Bedlam ships with the following enhancements on top of upstream Paperclip:
+Bedlam is built for local-first agent-company operations:
 
 ### Stigmergic Coordination
 Agents communicate indirectly through shared environmental state rather than direct message passing. This allows large agent teams to self-organize around work without tight coupling or central orchestration bottlenecks. Agents leave traces; other agents respond to those traces.
@@ -39,6 +39,17 @@ Bedlam is designed to run entirely on your own hardware. Embedded Postgres ships
 ### Blocker Autonomy
 
 Issues have structured blocker fields (`blockedByIssueIds`, `blockedReason`, `needsHumanAt`, `needsHumanReason`, `selfFixAttempts`). An in-process scheduler auto-unblocks issues when their dependencies complete (`blocker_reconciler`), flags blocked-too-long issues for human attention (`stale_blocked_escalator`), and writes a human-readable daily status digest (`daily_status_writer`). A behavior contract for engineer agents (`docs/agent-contracts/block-handling.md`) ensures agents try self-fix before blocking and use `needsHumanAt` for auth/credential issues. Operators see only what genuinely needs them, not a full blocked queue. See `docs/blocker-autonomy.md`.
+
+### Company Reflex Loops
+
+Company Reflex Loops are governed, auditable self-improvement loops for Bedlam companies. A loop observes company state, diagnoses bottlenecks, proposes typed changes, evaluates those changes, requests approval when required, applies safe approved actions, and records learnings.
+
+The first loop kind is `throughput_optimizer`. It deterministically inspects issues and heartbeat runs for blocked work, stale active issues, failed or timed-out runs, resolved blockers that are still marked blocked, and overloaded high-priority queues. The first executable proposal types are intentionally narrow:
+
+- `add_issue_comment` — low-risk follow-through comments on affected issues
+- `create_issue` — medium-risk triage work items that require approval by default
+
+Direct agent configuration, budget, model-routing, plugin installation, and code modification proposals are intentionally not executable in this foundation.
 
 ### Follow-Through Agent Templates
 
@@ -246,16 +257,16 @@ Operationally, the production-grade pattern we use is documented in `docs/deploy
 
 ---
 
-## Attribution
+## Lineage / Attribution
 
-Bedlam is a fork of [Paperclip](https://github.com/paperclipai/paperclip), originally created by Dotta.
+Bedlam began as a fork of [Paperclip](https://github.com/paperclipai/paperclip), originally created by Dotta, and has since evolved into a local-first company AI control plane with substantial Bedlam-specific architecture, governance, budget, orchestration, adapter, workspace, and operational features.
 
-Upstream Paperclip is an open-source agent orchestration platform. Bedlam preserves all original Paperclip functionality and adds the enhancements described above. Bug fixes and non-breaking improvements from upstream may be merged periodically.
+Portions derived from upstream Paperclip remain under the original MIT license. Bedlam additions are licensed under Apache 2.0. See `LICENSE`, `NOTICE`, and [`docs/lineage.md`](docs/lineage.md) for details.
 
 ---
 
 ## License
 
-Apache 2.0 — see `LICENSE`.
+Apache 2.0 for Bedlam additions, with MIT notices retained for upstream Paperclip-derived portions. See `LICENSE` and `NOTICE`.
 
 Bedlam additions and enhancements are Copyright (c) 2026 Ancilis, Inc., licensed under Apache 2.0. Upstream Paperclip portions remain under the original MIT License. Both notices are included in `LICENSE`.

@@ -24,6 +24,7 @@ const Issues = lazy(() => import("./pages/Issues").then((mod) => ({ default: mod
 const IssueDetail = lazy(() => import("./pages/IssueDetail").then((mod) => ({ default: mod.IssueDetail })));
 const Routines = lazy(() => import("./pages/Routines").then((mod) => ({ default: mod.Routines })));
 const RoutineDetail = lazy(() => import("./pages/RoutineDetail").then((mod) => ({ default: mod.RoutineDetail })));
+const CompanyLoops = lazy(() => import("./pages/CompanyLoops").then((mod) => ({ default: mod.CompanyLoops })));
 const ExecutionWorkspaceDetail = lazy(() => import("./pages/ExecutionWorkspaceDetail").then((mod) => ({ default: mod.ExecutionWorkspaceDetail })));
 const Goals = lazy(() => import("./pages/Goals").then((mod) => ({ default: mod.Goals })));
 const GoalDetail = lazy(() => import("./pages/GoalDetail").then((mod) => ({ default: mod.GoalDetail })));
@@ -177,6 +178,8 @@ function boardRoutes() {
       <Route path="issues/:issueId" element={<IssueDetail />} />
       <Route path="routines" element={<Routines />} />
       <Route path="routines/:routineId" element={<RoutineDetail />} />
+      <Route path="loops" element={<CompanyLoops />} />
+      <Route path="companies/:companyId/loops" element={<CompanyLoops />} />
       <Route path="execution-workspaces/:workspaceId" element={<ExecutionWorkspaceDetail />} />
       <Route path="goals" element={<Goals />} />
       <Route path="goals/:goalId" element={<GoalDetail />} />
@@ -347,6 +350,10 @@ export function App() {
             <Route path="issues/:issueId" element={<UnprefixedBoardRedirect />} />
             <Route path="routines" element={<UnprefixedBoardRedirect />} />
             <Route path="routines/:routineId" element={<UnprefixedBoardRedirect />} />
+            <Route path="loops" element={<UnprefixedBoardRedirect />} />
+            <Route path="companies/:companyId/loops" element={<Layout />}>
+              <Route index element={<CompanyLoops />} />
+            </Route>
             <Route path="skills/*" element={<UnprefixedBoardRedirect />} />
             <Route path="settings" element={<LegacySettingsRedirect />} />
             <Route path="settings/*" element={<LegacySettingsRedirect />} />

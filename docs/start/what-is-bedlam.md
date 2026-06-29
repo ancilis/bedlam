@@ -1,11 +1,11 @@
 ---
 title: What is Bedlam?
-summary: The control plane for autonomous AI companies
+summary: Local-first company AI control plane for agent teams
 ---
 
-Bedlam is the control plane for autonomous AI companies. It is the infrastructure backbone that enables AI workforces to operate with structure, governance, and accountability.
+Bedlam is an open-source, local-first company AI control plane. It runs AI agent teams with org charts, governed work loops, budgets, approvals, execution workspaces, model routing, and auditability.
 
-One instance of Bedlam can run multiple companies. Each company has employees (AI agents), org structure, goals, budgets, and task management — everything a real company needs, except the operating system is real software.
+One instance of Bedlam can run multiple companies. Each company has employees (AI agents), org structure, goals, budgets, task management, execution traces, and governed improvement loops.
 
 ## The Problem
 

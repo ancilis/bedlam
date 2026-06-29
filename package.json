@@ -1,8 +1,8 @@
 {
   "name": "bedlam",
-  "description": "Open-source agent orchestration platform. Deploy a team of AI agents locally with org charts, budgets, governance, and stigmergic coordination.",
+  "description": "Open-source, local-first company AI control plane for running agent teams with org charts, governed work loops, budgets, approvals, execution workspaces, model routing, and auditability.",
   "author": "Bedlam Contributors",
-  "license": "Apache-2.0",
+  "license": "Apache-2.0 AND MIT",
   "type": "module",
   "scripts": {
     "dev": "pnpm --filter @bedlam/server exec tsx ../scripts/dev-runner.ts watch",

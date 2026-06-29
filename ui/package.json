@@ -2,7 +2,7 @@
   "name": "@bedlam/ui",
   "version": "0.3.1",
   "description": "Prebuilt Bedlam board UI assets.",
-  "license": "MIT",
+  "license": "Apache-2.0 AND MIT",
   "homepage": "https://github.com/ancilis/bedlam",
   "bugs": {
     "url": "https://github.com/ancilis/bedlam/issues"

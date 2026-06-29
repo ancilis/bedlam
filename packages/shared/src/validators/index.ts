@@ -217,6 +217,29 @@ export {
 } from "./routine.js";
 
 export {
+  createCompanyLoopSchema,
+  updateCompanyLoopSchema,
+  runCompanyLoopSchema,
+  addIssueCommentProposalPayloadSchema,
+  createIssueProposalPayloadSchema,
+  companyLoopProposalPayloadSchema,
+  approveCompanyLoopProposalSchema,
+  rejectCompanyLoopProposalSchema,
+  applyCompanyLoopProposalSchema,
+  companyLoopProposalActionSchema,
+  type CreateCompanyLoop,
+  type UpdateCompanyLoop,
+  type RunCompanyLoop,
+  type AddIssueCommentProposalPayload,
+  type CreateIssueProposalPayload,
+  type CompanyLoopProposalPayload,
+  type ApproveCompanyLoopProposal,
+  type RejectCompanyLoopProposal,
+  type ApplyCompanyLoopProposal,
+  type CompanyLoopProposalAction,
+} from "./company-loop.js";
+
+export {
   createCostEventSchema,
   updateBudgetSchema,
   type CreateCostEvent,

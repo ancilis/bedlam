@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "name": "Bedlam",
-  "description": "The control plane for autonomous AI companies",
+  "description": "Local-first company AI control plane for agent teams",
   "theme": "mint",
   "colors": {
     "primary": "#2563EB",
@@ -30,7 +30,8 @@
               "start/what-is-bedlam",
               "start/quickstart",
               "start/core-concepts",
-              "start/architecture"
+              "start/architecture",
+              "lineage"
             ]
           }
         ]
@@ -48,6 +49,7 @@
               "guides/board-operator/managing-tasks",
               "guides/board-operator/execution-workspaces-and-runtime-services",
               "guides/board-operator/delegation",
+              "loops/company-reflex-loops",
               "guides/board-operator/approvals",
               "guides/board-operator/costs-and-budgets",
               "guides/board-operator/activity-log",

@@ -404,6 +404,124 @@ describeEmbeddedPostgres("issueService.list participantAgentId", () => {
   });
 });
 
+describeEmbeddedPostgres("issueService status transitions", () => {
+  let db!: ReturnType<typeof createDb>;
+  let svc!: ReturnType<typeof issueService>;
+  let tempDb: Awaited<ReturnType<typeof startEmbeddedPostgresTestDatabase>> | null = null;
+
+  beforeAll(async () => {
+    tempDb = await startEmbeddedPostgresTestDatabase("bedlam-issues-transitions-");
+    db = createDb(tempDb.connectionString);
+    svc = issueService(db);
+  }, 20_000);
+
+  afterEach(async () => {
+    await db.delete(issueComments);
+    await db.delete(issueInboxArchives);
+    await db.delete(activityLog);
+    await db.delete(issues);
+    await db.delete(executionWorkspaces);
+    await db.delete(projectWorkspaces);
+    await db.delete(projects);
+    await db.delete(agents);
+    await db.delete(instanceSettings);
+    await db.delete(companies);
+  });
+
+  afterAll(async () => {
+    await tempDb?.cleanup();
+  });
+
+  async function seedIssue(status: string) {
+    const companyId = randomUUID();
+    const agentId = randomUUID();
+    const issueId = randomUUID();
+
+    await db.insert(companies).values({
+      id: companyId,
+      name: "Bedlam",
+      issuePrefix: `T${companyId.replace(/-/g, "").slice(0, 6).toUpperCase()}`,
+      requireBoardApprovalForNewAgents: false,
+    });
+
+    await db.insert(agents).values({
+      id: agentId,
+      companyId,
+      name: "CodexCoder",
+      role: "engineer",
+      status: "active",
+      adapterType: "codex_local",
+      adapterConfig: {},
+      runtimeConfig: {},
+      permissions: {},
+    });
+
+    await db.insert(issues).values({
+      id: issueId,
+      companyId,
+      title: `${status} issue`,
+      status,
+      priority: "medium",
+      assigneeAgentId: status === "in_progress" || status === "in_review" ? agentId : null,
+    });
+
+    return { companyId, agentId, issueId };
+  }
+
+  it.each([
+    ["backlog", "todo"],
+    ["backlog", "cancelled"],
+    ["todo", "in_progress"],
+    ["todo", "blocked"],
+    ["todo", "cancelled"],
+    ["in_progress", "in_review"],
+    ["in_progress", "blocked"],
+    ["in_progress", "done"],
+    ["in_progress", "cancelled"],
+    ["in_review", "in_progress"],
+    ["in_review", "done"],
+    ["in_review", "cancelled"],
+    ["blocked", "todo"],
+    ["blocked", "in_progress"],
+    ["blocked", "cancelled"],
+  ])("allows %s -> %s", async (from, to) => {
+    const { agentId, issueId } = await seedIssue(from);
+
+    const updated = await svc.update(issueId, {
+      status: to,
+      ...(to === "in_progress" ? { assigneeAgentId: agentId } : {}),
+    });
+
+    expect(updated?.status).toBe(to);
+  });
+
+  it.each([
+    ["backlog", "done"],
+    ["todo", "done"],
+    ["in_review", "todo"],
+    ["blocked", "done"],
+    ["done", "todo"],
+    ["cancelled", "todo"],
+  ])("rejects %s -> %s", async (from, to) => {
+    const { agentId, issueId } = await seedIssue(from);
+
+    await expect(
+      svc.update(issueId, {
+        status: to,
+        ...(to === "in_progress" ? { assigneeAgentId: agentId } : {}),
+      }),
+    ).rejects.toThrow(`Invalid issue status transition: ${from} -> ${to}`);
+  });
+
+  it("allows explicit terminal reopen for the existing board comment reopen path", async () => {
+    const { issueId } = await seedIssue("done");
+
+    const updated = await svc.update(issueId, { status: "todo" }, { allowTerminalReopen: true });
+
+    expect(updated?.status).toBe("todo");
+  });
+});
+
 describeEmbeddedPostgres("issueService.create workspace inheritance", () => {
   let db!: ReturnType<typeof createDb>;
   let svc!: ReturnType<typeof issueService>;

@@ -1,7 +1,7 @@
 {
   "name": "@bedlam/adapter-pi-local",
   "version": "0.3.1",
-  "license": "MIT",
+  "license": "Apache-2.0 AND MIT",
   "homepage": "https://github.com/ancilis/bedlam",
   "bugs": {
     "url": "https://github.com/ancilis/bedlam/issues"

@@ -35,12 +35,31 @@ import { resolveIssueGoalId, resolveNextIssueGoalId } from "./issue-goal-fallbac
 import { getDefaultCompanyGoal } from "./goals.js";
 
 const ALL_ISSUE_STATUSES = ["backlog", "todo", "in_progress", "in_review", "blocked", "done", "cancelled"];
+const ISSUE_STATUS_TRANSITIONS: Record<string, readonly string[]> = {
+  backlog: ["todo", "cancelled"],
+  todo: ["in_progress", "blocked", "cancelled"],
+  in_progress: ["in_review", "blocked", "done", "cancelled"],
+  in_review: ["in_progress", "done", "cancelled"],
+  blocked: ["todo", "in_progress", "cancelled"],
+  done: [],
+  cancelled: [],
+};
 const MAX_ISSUE_COMMENT_PAGE_LIMIT = 500;
 
-function assertTransition(from: string, to: string) {
+type IssueTransitionOptions = {
+  allowTerminalReopen?: boolean;
+};
+
+function assertTransition(from: string, to: string, options: IssueTransitionOptions = {}) {
   if (from === to) return;
   if (!ALL_ISSUE_STATUSES.includes(to)) {
     throw conflict(`Unknown issue status: ${to}`);
+  }
+  if (options.allowTerminalReopen && (from === "done" || from === "cancelled") && to === "todo") {
+    return;
+  }
+  if (!ISSUE_STATUS_TRANSITIONS[from]?.includes(to)) {
+    throw conflict(`Invalid issue status transition: ${from} -> ${to}`);
   }
 }
 
@@ -1099,7 +1118,11 @@ export function issueService(db: Db) {
       });
     },
 
-    update: async (id: string, data: Partial<typeof issues.$inferInsert> & { labelIds?: string[] }) => {
+    update: async (
+      id: string,
+      data: Partial<typeof issues.$inferInsert> & { labelIds?: string[] },
+      options: IssueTransitionOptions = {},
+    ) => {
       const existing = await db
         .select()
         .from(issues)
@@ -1116,7 +1139,7 @@ export function issueService(db: Db) {
       }
 
       if (issueData.status) {
-        assertTransition(existing.status, issueData.status);
+        assertTransition(existing.status, issueData.status, options);
       }
 
       const patch: Partial<typeof issues.$inferInsert> = {
