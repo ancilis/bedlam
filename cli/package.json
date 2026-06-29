@@ -1,5 +1,5 @@
 {
-  "name": "bedlam",
+  "name": "@ancilis/bedlam",
   "version": "0.3.1",
   "description": "Bedlam CLI — orchestrate AI agent teams to run a business",
   "type": "module",
@@ -13,7 +13,7 @@
     "orchestration",
     "cli"
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/ancilis/bedlam",

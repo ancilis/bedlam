@@ -6,6 +6,20 @@ this block is fully generic.
 
 ---
 
+## Cross-identity approval (when needed)
+
+GitHub forbids a user from approving their own PR. If your PRs are typically authored by an agent identity that's the same GitHub user as the reviewer agent's identity, every approval will be blocked at the platform layer.
+
+The fix: provision a second GitHub identity (e.g. `your-org-reviewer`) and add it as a `write` collaborator. Reviewer agents then approve via:
+
+```bash
+GH_TOKEN=$(gh auth token --user <reviewer-identity>) gh pr review --approve <number> --repo <repo> --body "..."
+```
+
+Only the formal `--approve` requires the cross-identity token. Comments and request-changes can stay on the primary identity.
+
+Skip this section if your PRs are already authored by humans or by a distinct identity.
+
 ## Review SLA
 
 When a PR is ready (CI green, not draft, scope-confirmed), you have **24 hours** to either:

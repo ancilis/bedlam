@@ -64,7 +64,7 @@ See [`templates/`](./templates/) for the agents and blocks; [`docs/agent-contrac
 The fastest way to get Bedlam running:
 
 ```sh
-npx bedlam onboard --yes
+npx @ancilis/bedlam onboard --yes
 ```
 
 This walks through setup, configures your environment, and starts the server at `http://localhost:3100`. Re-running `onboard` keeps your existing config and data. Use `bedlam configure` to edit settings later.
@@ -72,7 +72,7 @@ This walks through setup, configures your environment, and starts the server at 
 Subsequent runs:
 
 ```sh
-npx bedlam run
+npx @ancilis/bedlam run
 ```
 
 ### Working from a clone (contributors)
