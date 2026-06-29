@@ -1,0 +1,13 @@
+Bedlam
+Copyright (c) 2026 Ancilis, Inc.
+
+Bedlam began as a fork of Paperclip:
+https://github.com/paperclipai/paperclip
+
+Paperclip was originally created by Dotta. Portions of this repository are
+derived from upstream Paperclip and remain subject to the original MIT license
+notice preserved in LICENSE.
+
+Bedlam-specific additions, modifications, documentation, packaging, governance,
+budget, orchestration, adapter, workspace, plugin, and operational features are
+licensed under the Apache License, Version 2.0 unless otherwise stated.

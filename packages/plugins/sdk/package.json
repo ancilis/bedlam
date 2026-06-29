@@ -2,7 +2,7 @@
   "name": "@bedlam/plugin-sdk",
   "version": "1.0.0",
   "description": "Stable public API for Bedlam plugins — worker-side context and UI bridge hooks",
-  "license": "MIT",
+  "license": "Apache-2.0 AND MIT",
   "homepage": "https://github.com/ancilis/bedlam",
   "bugs": {
     "url": "https://github.com/ancilis/bedlam/issues"

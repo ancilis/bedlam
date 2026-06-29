@@ -1096,7 +1096,9 @@ export function issueRoutes(db: Db, storage: StorageService) {
     }
     let issue;
     try {
-      issue = await svc.update(id, updateFields);
+      const reopenOptions =
+        commentBody && reopenRequested === true && isClosed ? { allowTerminalReopen: true } : undefined;
+      issue = reopenOptions ? await svc.update(id, updateFields, reopenOptions) : await svc.update(id, updateFields);
     } catch (err) {
       if (err instanceof HttpError && err.status === 422) {
         logger.warn(
@@ -1522,7 +1524,7 @@ export function issueRoutes(db: Db, storage: StorageService) {
     let currentIssue = issue;
 
     if (reopenRequested && isClosed) {
-      const reopenedIssue = await svc.update(id, { status: "todo" });
+      const reopenedIssue = await svc.update(id, { status: "todo" }, { allowTerminalReopen: true });
       if (!reopenedIssue) {
         res.status(404).json({ error: "Issue not found" });
         return;

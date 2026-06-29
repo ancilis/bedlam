@@ -337,6 +337,13 @@
       "when": 1777247646849,
       "tag": "0047_green_thena",
       "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1782751608895,
+      "tag": "0048_silent_leopardon",
+      "breakpoints": true
     }
   ]
 }

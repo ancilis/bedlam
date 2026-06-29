@@ -179,6 +179,47 @@ export type RoutineRunStatus = (typeof ROUTINE_RUN_STATUSES)[number];
 export const ROUTINE_RUN_SOURCES = ["schedule", "manual", "api", "webhook"] as const;
 export type RoutineRunSource = (typeof ROUTINE_RUN_SOURCES)[number];
 
+export const COMPANY_LOOP_KINDS = ["throughput_optimizer"] as const;
+export type CompanyLoopKind = (typeof COMPANY_LOOP_KINDS)[number];
+
+export const COMPANY_LOOP_STATUSES = ["active", "paused", "archived"] as const;
+export type CompanyLoopStatus = (typeof COMPANY_LOOP_STATUSES)[number];
+
+export const COMPANY_LOOP_CADENCE_KINDS = ["manual", "interval"] as const;
+export type CompanyLoopCadenceKind = (typeof COMPANY_LOOP_CADENCE_KINDS)[number];
+
+export const RISK_TIERS = ["low", "medium", "high"] as const;
+export type RiskTier = (typeof RISK_TIERS)[number];
+
+export const COMPANY_LOOP_RUN_STATUSES = [
+  "queued",
+  "observing",
+  "diagnosing",
+  "proposing",
+  "evaluating",
+  "awaiting_approval",
+  "ready_to_apply",
+  "applied",
+  "failed",
+  "cancelled",
+] as const;
+export type CompanyLoopRunStatus = (typeof COMPANY_LOOP_RUN_STATUSES)[number];
+
+export const COMPANY_LOOP_OBSERVATION_SEVERITIES = ["info", "warning", "critical"] as const;
+export type CompanyLoopObservationSeverity = (typeof COMPANY_LOOP_OBSERVATION_SEVERITIES)[number];
+
+export const COMPANY_LOOP_PROPOSAL_TYPES = ["create_issue", "add_issue_comment"] as const;
+export type CompanyLoopProposalType = (typeof COMPANY_LOOP_PROPOSAL_TYPES)[number];
+
+export const COMPANY_LOOP_PROPOSAL_STATUSES = [
+  "proposed",
+  "approved",
+  "rejected",
+  "applied",
+  "failed",
+] as const;
+export type CompanyLoopProposalStatus = (typeof COMPANY_LOOP_PROPOSAL_STATUSES)[number];
+
 export const PAUSE_REASONS = ["manual", "budget", "system"] as const;
 export type PauseReason = (typeof PAUSE_REASONS)[number];
 
