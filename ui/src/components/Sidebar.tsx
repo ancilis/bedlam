@@ -8,6 +8,7 @@ import {
   Search,
   SquarePen,
   Network,
+  BookOpen,
   Boxes,
   Repeat,
   RefreshCcw,
@@ -102,6 +103,7 @@ export function Sidebar() {
           <SidebarNavItem to="/issues" label="Issues" icon={CircleDot} />
           <SidebarNavItem to="/routines" label="Routines" icon={Repeat} textBadge="Beta" textBadgeTone="amber" />
           <SidebarNavItem to="/loops" label="Loops" icon={RefreshCcw} textBadge="Alpha" textBadgeTone="amber" />
+          <SidebarNavItem to="/ledger" label="Ledger" icon={BookOpen} />
           <SidebarNavItem to="/goals" label="Goals" icon={Target} />
         </SidebarSection>
 

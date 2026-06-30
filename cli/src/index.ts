@@ -6,6 +6,7 @@ import { configure } from "./commands/configure.js";
 import { addAllowedHostname } from "./commands/allowed-hostname.js";
 import { heartbeatRun } from "./commands/heartbeat-run.js";
 import { runCommand } from "./commands/run.js";
+import { demoAiEngineeringCommand } from "./commands/demo.js";
 import { bootstrapCeoInvite } from "./commands/auth-bootstrap-ceo.js";
 import { dbBackupCommand } from "./commands/db-backup.js";
 import { registerContextCommands } from "./commands/client/context.js";
@@ -106,6 +107,16 @@ program
   .option("--repair", "Attempt automatic repairs during doctor", true)
   .option("--no-repair", "Disable automatic repairs during doctor")
   .action(runCommand);
+
+const demo = program.command("demo").description("Install deterministic demo companies");
+
+demo
+  .command("ai-engineering")
+  .description("Install or refresh the AI Engineering Company flagship demo")
+  .option("-c, --config <path>", "Path to config file")
+  .option("-d, --data-dir <path>", DATA_DIR_OPTION_HELP)
+  .option("-y, --yes", "Skip confirmation prompts", false)
+  .action(demoAiEngineeringCommand);
 
 const heartbeat = program.command("heartbeat").description("Heartbeat utilities");
 

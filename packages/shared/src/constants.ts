@@ -220,6 +220,23 @@ export const COMPANY_LOOP_PROPOSAL_STATUSES = [
 ] as const;
 export type CompanyLoopProposalStatus = (typeof COMPANY_LOOP_PROPOSAL_STATUSES)[number];
 
+export const PROPOSAL_OUTCOME_STATUSES = [
+  "observing",
+  "succeeded",
+  "neutral",
+  "regressed",
+  "rolled_back",
+] as const;
+export type ProposalOutcomeStatus = (typeof PROPOSAL_OUTCOME_STATUSES)[number];
+
+export const COMPANY_LEARNING_SOURCE_TYPES = [
+  "loop_run",
+  "proposal_outcome",
+  "manual",
+  "demo_seed",
+] as const;
+export type CompanyLearningSourceType = (typeof COMPANY_LEARNING_SOURCE_TYPES)[number];
+
 export const PAUSE_REASONS = ["manual", "budget", "system"] as const;
 export type PauseReason = (typeof PAUSE_REASONS)[number];
 

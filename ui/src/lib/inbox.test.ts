@@ -172,6 +172,41 @@ function makeIssue(id: string, isUnreadForMe: boolean): Issue {
 
 const dashboard: DashboardSummary = {
   companyId: "company-1",
+  company: {
+    id: "company-1",
+    name: "Paperclip",
+    mission: null,
+    status: "active",
+    issuePrefix: "PAP",
+  },
+  org: {
+    totalAgents: 1,
+    roots: [],
+    agents: [],
+  },
+  work: {
+    open: 1,
+    blocked: 0,
+    stale: [],
+    highPriorityBacklog: [],
+  },
+  spend: {
+    monthSpendCents: 900,
+    monthBudgetCents: 1000,
+    monthUtilizationPercent: 90,
+    activeBudgetPolicies: 0,
+  },
+  loops: {
+    active: 0,
+    throughputOptimizer: null,
+    latestRuns: [],
+  },
+  proposals: {
+    latest: [],
+  },
+  learnings: {
+    latest: [],
+  },
   agents: {
     active: 1,
     running: 0,

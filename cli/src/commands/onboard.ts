@@ -99,7 +99,7 @@ function resolvePathFromEnv(rawValue: string | undefined): string | null {
   return path.resolve(expandHomePrefix(rawValue.trim()));
 }
 
-function quickstartDefaultsFromEnv(): {
+export function quickstartDefaultsFromEnv(): {
   defaults: OnboardDefaults;
   usedEnvKeys: string[];
   ignoredEnvKeys: Array<{ key: string; reason: string }>;

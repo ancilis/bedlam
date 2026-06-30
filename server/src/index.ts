@@ -71,6 +71,11 @@ export interface StartedServer {
   databaseUrl: string;
 }
 
+export {
+  seedAiEngineeringCompanyDemo,
+  type AiEngineeringCompanyDemoSeedResult,
+} from "./services/demo-ai-engineering-company.js";
+
 export async function startServer(): Promise<StartedServer> {
   let config = loadConfig();
   if (process.env.BEDLAM_SECRETS_PROVIDER === undefined) {
