@@ -14,6 +14,8 @@ export { budgetService } from "./budgets.js";
 export { secretService } from "./secrets.js";
 export { routineService } from "./routines.js";
 export { companyLoopsService } from "./company-loops.js";
+export { companyLedgerService } from "./company-ledger.js";
+export { seedAiEngineeringCompanyDemo, type AiEngineeringCompanyDemoSeedResult } from "./demo-ai-engineering-company.js";
 export { costService } from "./costs.js";
 export { financeService } from "./finance.js";
 export { heartbeatService } from "./heartbeat.js";

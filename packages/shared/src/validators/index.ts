@@ -240,6 +240,13 @@ export {
 } from "./company-loop.js";
 
 export {
+  recordProposalOutcomeSchema,
+  recordCompanyLearningSchema,
+  type RecordProposalOutcome,
+  type RecordCompanyLearning,
+} from "./company-ledger.js";
+
+export {
   createCostEventSchema,
   updateBudgetSchema,
   type CreateCostEvent,

@@ -32,6 +32,8 @@ export {
   companyLoopRuns,
   companyLoops,
 } from "./company_loops.js";
+export { companyLearnings } from "./company_learnings.js";
+export { proposalOutcomes } from "./proposal_outcomes.js";
 export { routines, routineTriggers, routineRuns } from "./routines.js";
 export { issueWorkProducts } from "./issue_work_products.js";
 export { labels } from "./labels.js";

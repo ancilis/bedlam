@@ -66,6 +66,9 @@ export const queryKeys = {
     runDetail: (id: string) => ["company-loops", "run-detail", id] as const,
     proposals: (runId: string) => ["company-loops", "proposals", runId] as const,
   },
+  companyLedger: {
+    list: (companyId: string) => ["company-ledger", companyId] as const,
+  },
   executionWorkspaces: {
     list: (companyId: string, filters?: Record<string, string | boolean | undefined>) =>
       ["execution-workspaces", companyId, filters ?? {}] as const,

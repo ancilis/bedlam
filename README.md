@@ -6,6 +6,34 @@ Bedlam lets one operator run an AI-native company end-to-end: define goals, hire
 
 ---
 
+## 5-Minute Demo: AI Engineering Company
+
+Run a local-first agent company control plane with deterministic fixture data. No external model, API key, or agent CLI is required for the demo seed.
+
+```sh
+npx @ancilis/bedlam demo ai-engineering --yes && npx @ancilis/bedlam run
+```
+
+Open `http://localhost:3100`, select **Bedlam AI Engineering Company**, and you should see:
+
+- a mission, goals, org chart, budgets, and seven agents: CEO, CTO, Engineer, Reviewer, Merger, Budget Steward, and Quality Steward
+- project **Improve Bedlam** with stale, blocked, failed-run follow-up, high-priority backlog, review queue, and safety-policy issues
+- an active **Throughput Optimizer** loop with a one-click run action
+- observations and proposals in **Loops**
+- at least one durable learning and proposal outcome in the **Company Operating Ledger**
+
+Why it matters: Bedlam does not just run isolated agents. It gives an AI-native company governed loops, budget boundaries, reviewable proposals, and durable operating memory.
+
+Already onboarded?
+
+```sh
+bedlam demo ai-engineering && bedlam run
+```
+
+Full walkthrough: [`docs/demo-ai-engineering-company.md`](docs/demo-ai-engineering-company.md).
+
+---
+
 ## What Bedlam Provides
 
 Bedlam is built for local-first agent-company operations:
